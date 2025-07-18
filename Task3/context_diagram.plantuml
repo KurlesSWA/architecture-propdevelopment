@@ -1,0 +1,42 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Диаграмма контекста всей системы PropDevelopment
+
+' --- Пользователи (Persons) ---
+Person(client, "Клиент", "Потенциальный покупатель недвижимости")
+Person(owner, "Собственник", "Владелец жилья и пользователь услуг")
+Person(manager, "Менеджер", "Сотрудник, управляющий продажами и сделками")
+Person(accountant, "Бухгалтер", "Сотрудник, отвечающий за финансовый учёт")
+Person(analyst, "Аналитик", "Сотрудник, работающий с данными (BI, бизнес-анализ)")
+
+' --- Центральная система ---
+System(propdev_system, "IT-система PropDevelopment", "Весь IT-ландшафт компании, включая продажи, ЖКУ, финансы и данные")
+
+' --- Внешние системы ---
+System_Ext(gov_registry, "Гос. рег. органы", "Системы для регистрации сделок (СМЭВ)")
+System_Ext(payment_system, "Платёжная система", "Внешний провайдер для проведения онлайн-платежей")
+System_Ext(hcs_provider, "Поставщики ресурсов ЖКХ", "API управляющих компаний-партнёров")
+System_Ext(smart_home_partner, "Платформа 'Умный дом'", "Партнёрская система для управления домофонами и шлагбаумами")
+System_Ext(intercom, "Интеллектуальный домофон", "Физическое устройство на объекте")
+System_Ext(barrier, "Интеллектуальный шлагбаум", "Физическое устройство на объекте")
+
+' --- Связи ---
+' Пользователи
+Rel(client, propdev_system, "Подбирает и покупает недвижимость онлайн")
+Rel(owner, propdev_system, "Оплачивает ЖКУ, управляет 'Умным домом'")
+Rel(manager, propdev_system, "Управляет данными клиентов и сделок")
+Rel(accountant, propdev_system, "Ведет финансовый учёт")
+Rel(analyst, propdev_system, "Анализирует данные и строит отчёты")
+
+' Внешние системы
+Rel(propdev_system, gov_registry, "Регистрирует сделки", "SOAP/СМЭВ")
+Rel(propdev_system, payment_system, "Проводит платежи", "HTTPS/API")
+Rel(propdev_system, hcs_provider, "Обменивается данными по ЖКУ", "HTTPS/API")
+Rel(propdev_system, smart_home_partner, "Управляет доступом", "HTTPS/API")
+
+' Связи платформы "Умный дом" с устройствами
+Rel(smart_home_partner, intercom, "Управляет", "Zigbee/Wi-Fi")
+Rel(smart_home_partner, barrier, "Управляет", "Zigbee/Wi-Fi")
+
+@enduml
